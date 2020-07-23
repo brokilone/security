@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Доктор</title>
-    <meta charset="UTF-8">
-</head>
-<h1>Doctor</h1>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<h2>Личный кабинет врача</h2>
 <img src="https://static.kulturologia.ru/files/u27045/270455341.jpg">
-<a href="/"><h5>Home page</h5></a>
-</html><!--тестовая страница-->
+<a href="/"><h5>Главная</h5></a>
+<br><br><br>

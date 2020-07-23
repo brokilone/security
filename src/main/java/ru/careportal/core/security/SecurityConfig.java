@@ -11,13 +11,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.careportal.core.service.UserService;
 
 @Data
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class PortalSecurity extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     @Autowired
@@ -29,20 +30,16 @@ public class PortalSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/registration", "/login","/", "/resources/**").permitAll()
-//                .antMatchers("/doctor", "/doctor/**").hasAnyRole(Role.DOCTOR.name(), Role.ADMIN.name())
-//                .antMatchers("/client", "/client/**").hasAnyRole(Role.CLIENT.name(), Role.ADMIN.name())
-//                .anyRequest().hasAnyRole(Role.ADMIN.name())
+                .antMatchers( "/registration", "/login", "/resources/**").permitAll()
                 .and()
-                .formLogin().loginPage("/login").permitAll()
+                .exceptionHandling().accessDeniedPage("/accessDenied")
                 .and()
-                .logout().permitAll()
+                .formLogin().loginPage("/login").failureForwardUrl("/registration").successHandler(myAuthenticationSuccessHandler()).permitAll()
+                .and()
+                .logout().logoutUrl("/exit").logoutSuccessUrl("/login").permitAll()
                 .and()
                 .csrf().disable();
     }
-//.access("hasAuthority('ADMIN')")
-//    .and()
-//    .httpBasic().and().csrf().disable();
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -50,7 +47,6 @@ public class PortalSecurity extends WebSecurityConfigurerAdapter {
         auth
                 .userDetailsService(userService)
                 .passwordEncoder(encoder());
-
     }
 
     @Bean
@@ -58,11 +54,8 @@ public class PortalSecurity extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public DataSource getDataSource() {
-//        DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-//        dataSourceBuilder.username("postgres");
-//        dataSourceBuilder.password("4444");
-//        return dataSourceBuilder.build();
-//    }
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new MySimpleUrlAuthenticationSuccessHandler();
+    }
 }

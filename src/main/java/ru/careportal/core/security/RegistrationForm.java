@@ -5,20 +5,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.careportal.core.dto.Role;
 import ru.careportal.core.dto.User;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 public class RegistrationForm {
 
-    private String username;
-    private String password;
-    private String roleName;
+  @NotBlank(message="Имя обязательно")
+  private String username;
+  @NotBlank(message="Пароль обязателен")
+  private String password;
+  @NotBlank(message="Пароль обязателен")
+  private String roleName;
 
-    public User toUser(PasswordEncoder passwordEncoder) {
+  public User toUser(PasswordEncoder passwordEncoder) {
 
-        User user = new User(username, passwordEncoder.encode(password));
-        Role role = Role.valueOf(roleName);
-        user.setRole(role);
+    User user = new User(username, passwordEncoder.encode(password));
+    Role role = Role.valueOf(roleName);
+    user.setRole(role);
 
-        return user;
-    }
-
+    return user;
+  }
 }

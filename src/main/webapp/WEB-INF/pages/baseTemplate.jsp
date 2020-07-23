@@ -36,7 +36,7 @@
 <footer>
     <div class="fixed-container">
         <section class="left-column">
-            <h3>Cвяжитесь с нами</h3>
+            <h3>Свяжитесь с нами</h3>
 
             <ul>
                 <li><a href="mailto:university@innopolis.ru">university@innopolis.ru</a></li>
